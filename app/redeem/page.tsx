@@ -2,13 +2,13 @@ import PrimaryButton from "@/components/buttons/PrimaryButton";
 import LabelBadge from "@/components/ui-elements/LabelBadge";
 import { CgArrowsExchangeV } from "react-icons/cg";
 
-export default function Mint() {
+export default function Redeem() {
   return (
     <div className="min-h-[calc(100dvh-115.963px-88px)] px-4 sm:px-8 py-10 sm:py-14 lg:py-24">
       <div className="max-w-[700px] rounded-xl mx-auto test">
         <div className="bg-darkSlate p-4 rounded-xl shadow-insetDarkGlow flex flex-col gap-6 sm:p-6">
           <div className="flex items-center justify-between">
-            <h1 className="font-bold text-lg sm:text-2xl">MINT</h1>
+            <h1 className="font-bold text-lg sm:text-2xl">Redeem</h1>
 
             <div className="border-2 rounded-full p-0.5 text-2xl">
               <CgArrowsExchangeV />
@@ -26,17 +26,17 @@ export default function Mint() {
               <div className="relative w-full flex rounded-lg shadow-insetDarkGlow">
                 <div className="absolute rounded-lg top-0 left-0 w-full h-full shadow-insetDarkGlow z-10 pointer-events-none"></div>
 
-                <div className="bg-background min-w-[110px] rounded-lg rounded-r-none p-4 flex items-center gap-2 sm:p-6 sm:gap-4">
+                <div className="bg-background min-w-[110px] rounded-lg rounded-r-none p-4 flex items-center gap-2 sm:p-6 sm:gap-4 sm:min-w-[145px]">
                   <img
-                    src="/images/usdv.png"
+                    src="/images/logo.png"
                     alt="usdv"
                     className="max-w-[30px]"
                   />
 
-                  <span className="font-bold sm:text-xl">USDV</span>
+                  <span className="font-bold sm:text-xl">MS</span>
                 </div>
 
-                <div className="bg-[#121212] rounded-lg rounded-l-none p-4 flex-1 flex items-center gap-2 sm:p-6 sm:gap-4 sm:min-w-[145px]">
+                <div className="bg-[#121212] rounded-lg rounded-l-none p-4 flex-1 flex items-center gap-2 sm:p-6 sm:gap-4">
                   <input
                     type="number"
                     placeholder="0"
@@ -60,12 +60,12 @@ export default function Mint() {
 
                 <div className="bg-background min-w-[110px] rounded-lg rounded-r-none p-4 flex items-center gap-2 sm:p-6 sm:gap-4 sm:min-w-[145px]">
                   <img
-                    src="/images/logo.png"
+                    src="/images/usdv.png"
                     alt="usdv"
                     className="max-w-[30px]"
                   />
 
-                  <span className="font-bold sm:text-xl">MS</span>
+                  <span className="font-bold sm:text-xl">USDV</span>
                 </div>
 
                 <div className="bg-[#121212] rounded-lg rounded-l-none p-4 flex-1 flex items-center gap-2 sm:p-6 sm:gap-4">
@@ -97,7 +97,7 @@ export default function Mint() {
               <div className="flex items-center gap-2 sm:gap-4">
                 <h1 className="font-semibold">Total USDV spent</h1>
 
-                <LabelBadge text="+20% Tax" />
+                <LabelBadge text="-5% Tax" className="text-red" />
               </div>
 
               <p className="font-medium">0</p>
@@ -105,7 +105,7 @@ export default function Mint() {
           </div>
 
           <div className="w-full flex flex-col gap-4">
-            <PrimaryButton label="MINT" className="py-3 rounded-[8px]" />
+            <PrimaryButton label="REDEEM" className="py-3 rounded-[8px]" />
 
             <hr className="border-gray-400" />
 
