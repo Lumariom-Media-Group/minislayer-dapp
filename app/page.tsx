@@ -4,9 +4,9 @@ import { CgArrowsExchangeV } from "react-icons/cg";
 
 export default function Mint() {
   return (
-    <div className="min-h-[calc(100dvh-115.963px-88px)] px-4 sm:px-8 py-10 sm:py-14 lg:py-24">
-      <div className="max-w-[700px] rounded-xl mx-auto test">
-        <div className="bg-darkSlate p-4 rounded-xl shadow-insetDarkGlow flex flex-col gap-6 sm:p-6">
+    <div className="min-h-[calc(100dvh-115.963px-88px)] overflow-x-hidden px-4 sm:px-8 py-10 sm:py-14 lg:py-32">
+      <div className="relative max-w-[700px] rounded-xl mx-auto container">
+        <div className="bg-darkSlate glowing-effect relative z-10 p-4 rounded-xl shadow-insetDarkGlow flex flex-col gap-6 sm:p-6">
           <div className="flex items-center justify-between">
             <h1 className="font-bold text-lg sm:text-2xl">MINT</h1>
 
