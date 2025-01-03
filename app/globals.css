@@ -135,9 +135,9 @@
   left: -12.5%;
   width: 125%;
   height: 125%;
-  background: #7d2cd425;
-  filter: blur(20px);
-  border-radius: 24px;
+  background: rgba(125, 44, 212, 0.09);
+  filter: blur(30px);
+  border-radius: 12px;
   z-index: -1;
 }
 
@@ -147,9 +147,9 @@
 
 @keyframes glow-filter {
   from {
-    filter: drop-shadow(0 0 10px #7e2cd4) drop-shadow(0 0 20px #7e2cd466);
+    filter: drop-shadow(0 0 10px #7e2cd4);
   }
   to {
-    filter: drop-shadow(0 0 20px #7e2cd4) drop-shadow(0 0 40px #7e2cd466);
+    filter: drop-shadow(0 0 20px #7e2cd4);
   }
 }
