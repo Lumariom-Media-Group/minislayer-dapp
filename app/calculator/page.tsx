@@ -12,7 +12,7 @@ export default function Calculator() {
   };
 
   return (
-    <div className="min-h-[calc(100dvh-115.963px-88px)] text-text overflow-x-hidden px-4 sm:px-8 py-10 sm:py-14 lg:py-24">
+    <div className="min-h-[calc(100dvh-115.963px-88px)] overflow-hidden text-text overflow-x-hidden px-4 sm:px-8 py-10 sm:py-14 lg:py-24">
       <div className="relative max-w-[700px] rounded-xl mx-auto container">
         <div className="bg-darkSlate bg-radial-glow glowing-effect relative z-10 p-4 rounded-xl shadow-insetDarkGlow flex flex-col gap-6 sm:p-6">
           <h1 className="font-semibold text-center text-lg sm:text-2xl">
@@ -54,7 +54,7 @@ export default function Calculator() {
 
               <div>
                 Current MS level:{" "}
-                <span className="text-primary font-bold text-xl sm:text-2xl underline">
+                <span className="text-primary ml-2 font-bold text-xl sm:text-2xl underline">
                   3
                 </span>
               </div>
@@ -119,7 +119,6 @@ export default function Calculator() {
           <div className="flex flex-col gap-2.5">
             <div className="sm:text-lg">
               <label htmlFor="label" className="font-medium text-gray">
-                {/* Total USDV spent/received */}
                 {selectedCalculator === ""
                   ? "Total USDV spent/received"
                   : selectedCalculator === "Mint Calculator"
