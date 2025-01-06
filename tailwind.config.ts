@@ -14,7 +14,8 @@ export default {
       colors: {
         primary: "#7e2cd4",      
         background: "#1b1622",   
-        text: "#ffffff",          
+        text: "#ffffff", 
+        gray: "#E2E4FB",         
         green: "#22f3d0",      
         red: "#aa2625", 
         darkSlate: "#202329"       

@@ -149,6 +149,7 @@
   from {
     filter: drop-shadow(0 0 10px #7e2cd4);
   }
+
   to {
     filter: drop-shadow(0 0 20px #7e2cd4);
   }
