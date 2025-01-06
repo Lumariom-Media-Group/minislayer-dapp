@@ -154,3 +154,7 @@
     filter: drop-shadow(0 0 20px #7e2cd4);
   }
 }
+
+.bg-radial-glow {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 10%, rgba(255, 255, 255, 0) 80%), #202329;
+}

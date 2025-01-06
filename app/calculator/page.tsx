@@ -14,7 +14,7 @@ export default function Calculator() {
   return (
     <div className="min-h-[calc(100dvh-115.963px-88px)] text-text overflow-x-hidden px-4 sm:px-8 py-10 sm:py-14 lg:py-24">
       <div className="relative max-w-[700px] rounded-xl mx-auto container">
-        <div className="bg-darkSlate glowing-effect relative z-10 p-4 rounded-xl shadow-insetDarkGlow flex flex-col gap-6 sm:p-6">
+        <div className="bg-darkSlate bg-radial-glow glowing-effect relative z-10 p-4 rounded-xl shadow-insetDarkGlow flex flex-col gap-6 sm:p-6">
           <h1 className="font-semibold text-center text-lg sm:text-2xl">
             Mini Slayer Calculator
           </h1>
@@ -64,7 +64,7 @@ export default function Calculator() {
               type="text"
               id="label"
               placeholder="0"
-              className="bg-background outline-none placeholder:text-gray-500 text-xl sm:text-2xl font-medium px-4 py-3 md:px-5 md:py-4 rounded-lg shadow-insetDarkGlow"
+              className="bg-[#121212] outline-none placeholder:text-gray-500 text-xl sm:text-2xl font-medium px-4 py-3 md:px-5 md:py-4 rounded-lg shadow-insetDarkGlow"
             />
           </div>
 
@@ -112,7 +112,7 @@ export default function Calculator() {
             <input
               type="text"
               placeholder="0"
-              className="bg-background outline-none placeholder:text-gray-500 text-xl sm:text-2xl font-medium px-4 py-3 md:px-5 md:py-4 rounded-lg shadow-insetDarkGlow"
+              className="bg-[#121212] outline-none placeholder:text-gray-500 text-xl sm:text-2xl font-medium px-4 py-3 md:px-5 md:py-4 rounded-lg shadow-insetDarkGlow"
             />
           </div>
 
