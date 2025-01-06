@@ -18,6 +18,8 @@ export default {
         gray: "#E2E4FB",         
         green: "#22f3d0",      
         red: "#aa2625", 
+        redLight: "#F37B22",
+        blue: "#22A2F3",
         darkSlate: "#202329"       
       },
       boxShadow: {
