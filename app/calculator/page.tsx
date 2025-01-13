@@ -1,15 +1,8 @@
 "use client";
 import { useState } from "react";
-import { FaChevronDown } from "react-icons/fa6";
 
 export default function Calculator() {
-  const [selectedCalculator, setSelectedCalculator] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleSelect = (value: string) => {
-    setSelectedCalculator(value);
-    setIsOpen(false);
-  };
+  const [activeTab, setActiveTab] = useState("Mint Calculator");
 
   return (
     <div className="min-h-[calc(100dvh-115.963px-88px)] overflow-hidden text-text overflow-x-hidden px-4 sm:px-8 py-10 sm:py-14 lg:py-24">
@@ -19,31 +12,21 @@ export default function Calculator() {
             Mini Slayer Calculator
           </h1>
 
-          <div className="w-full relative">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="w-full shadow-insetDarkGlow outline-none flex justify-between items-center gap-4 bg-primary text-white font-medium px-4 py-2.5 sm:px-5 sm:py-3 sm:text-xl rounded-lg transition-all hover:bg-primary-light focus:outline-none"
-            >
-              {selectedCalculator ? selectedCalculator : "Select Calculator"}
-              <FaChevronDown
-                className={`transform transition-transform ${
-                  isOpen ? "rotate-180" : ""
+          {/* Tabs */}
+          <div className="flex gap-4 sm:gap-6 justify-center mb-6">
+            {["Mint Calculator", "Redeem Calculator"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-lg font-medium rounded-lg transition-colors ${
+                  activeTab === tab
+                    ? "bg-primary text-white"
+                    : "bg-background text-gray hover:bg-primary-light hover:text-white"
                 }`}
-              />
-            </button>
-            {isOpen && (
-              <div className="absolute mt-2 shadow-primary shadow-sm bg-background text-text rounded-lg w-full z-10">
-                {["Mint Calculator", "Redeem Calculator"].map((item, index) => (
-                  <button
-                    key={index}
-                    className="block w-full text-left px-4 py-2.5 sm:py-3 sm:px-5 text-base font-medium rounded-lg transition-colors hover:bg-primary"
-                    onClick={() => handleSelect(item)}
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            )}
+              >
+                {tab}
+              </button>
+            ))}
           </div>
 
           <div className="flex flex-col gap-2 sm:gap-2.5">
@@ -70,9 +53,7 @@ export default function Calculator() {
             <div className="flex flex-col gap-2 sm:gap-2.5">
               <div className="sm:text-lg">
                 <label htmlFor="tokensInput" className="font-medium text-gray">
-                  {selectedCalculator === ""
-                    ? "Tokens Redeem/mint-able"
-                    : selectedCalculator === "Mint Calculator"
+                  {activeTab === "Mint Calculator"
                     ? "Tokens Mint-able"
                     : "Tokens Redeemable"}
                 </label>
@@ -123,48 +104,34 @@ export default function Calculator() {
           <div className="flex flex-col gap-2 sm:gap-2.5">
             <div className="sm:text-lg">
               <p className="font-medium text-gray">
-                {selectedCalculator === ""
-                  ? "Total USDV spent/received"
-                  : selectedCalculator === "Mint Calculator"
+                {activeTab === "Mint Calculator"
                   ? "Total USDV spent"
                   : "Total USDV received"}
               </p>
             </div>
-            {selectedCalculator === "" ? (
-              <div className="bg-background flex flex-col gap-1 font-medium px-4 py-3 text-2xl sm:text-4xl md:px-5 md:py-4 rounded-lg shadow-insetDarkGlow">
-                -
+            <div className="bg-background flex flex-col gap-1 font-medium px-4 py-3 md:px-5 md:py-4 rounded-lg shadow-insetDarkGlow">
+              <div className="flex items-center gap-1 font-bold text-base sm:text-lg">
+                <span>20 - </span>
+                <span className="text-red">5% Tax</span>
               </div>
-            ) : (
-              <div className="bg-background flex flex-col gap-1 font-medium px-4 py-3 md:px-5 md:py-4 rounded-lg shadow-insetDarkGlow">
-                <div className="flex items-center gap-1 font-bold text-base sm:text-lg">
-                  <span>20 - </span>
-                  <span className="text-red">5% Tax</span>
-                </div>
-                <div className="font-semibold text-blue text-3xl sm:text-4xl">
-                  19 USDV
-                </div>
+              <div className="font-semibold text-blue text-3xl sm:text-4xl">
+                19 USDV
               </div>
-            )}
+            </div>
           </div>
 
           <div className="flex flex-col gap-2 sm:gap-2.5">
             <div className="sm:text-lg">
               <p className="font-medium text-gray">Total USDT cost value:</p>
             </div>
-            {selectedCalculator === "" ? (
-              <div className="bg-background flex flex-col gap-1 font-medium px-4 py-3 text-2xl sm:text-4xl md:px-5 md:py-4 rounded-lg shadow-insetDarkGlow">
-                -
+            <div className="bg-background flex flex-col gap-1 font-medium px-4 py-3 md:px-5 md:py-4 rounded-lg shadow-insetDarkGlow">
+              <div className="font-semibold text-base sm:text-lg">
+                <span>29 USDV x 1.25</span>
               </div>
-            ) : (
-              <div className="bg-background flex flex-col gap-1 font-medium px-4 py-3 md:px-5 md:py-4 rounded-lg shadow-insetDarkGlow">
-                <div className="font-semibold text-base sm:text-lg">
-                  <span>29 USDV x 1.25</span>
-                </div>
-                <div className="font-bold text-green text-3xl sm:text-4xl">
-                  $ 23.75
-                </div>
+              <div className="font-bold text-green text-3xl sm:text-4xl">
+                $ 23.75
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
