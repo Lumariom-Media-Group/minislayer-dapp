@@ -9,10 +9,11 @@ import { miniSlayerAbi } from "@/abi/miniSlayerAbi";
 import { useReadContract, useReadContracts } from "wagmi";
 import { MINI_SLAYER, MINI_SLAYER_DECIMALS, USDV, USDV_DECIMALS } from "@/constants";
 import { useAccount } from "wagmi";
-import { readContract, waitForTransactionReceipt } from "wagmi/actions";
+import {  waitForTransactionReceipt } from "wagmi/actions";
 import { wagmiConfig } from "@/lib/wagmiConfig";
 import { useWriteContract } from "wagmi";
 import { toast } from "react-hot-toast";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 const miniSlayerContract = {
   address: MINI_SLAYER,
   abi: miniSlayerAbi
@@ -20,12 +21,11 @@ const miniSlayerContract = {
 
 
 const Redeem = () => {
-
+  const {openConnectModal} = useConnectModal()
   const { writeContractAsync } = useWriteContract();
   const amountInRef = useRef<HTMLInputElement>(null);
 
   const [mintAmount, setMintAmount] = useState(0);
-  const [amountOut, setAmountOut] = useState("");
   const { address, isConnected } = useAccount();
 
   const { data: usdvBalance } = useReadContract({
@@ -104,60 +104,23 @@ const Redeem = () => {
   const [mintPrice, redeemPrice] = miniSlayerPrice ? miniSlayerPrice : [BigInt(0), BigInt(0)]
 
 
-  const { data: getAmountOut, isSuccess: getAmountOutSuccess, isLoading: getAmountOutLoading } = useReadContract({
+  const { data: getAmountOut, isSuccess: getAmountOutSuccess, isLoading: getAmountOutLoading,error:getRedeemAmountOutError} = useReadContract({
     ...miniSlayerContract,
-    functionName: "getAmountOut",
-    args: [parseUnits(mintAmount.toString(), USDV_DECIMALS), tokenPrice || BigInt(0), getPricesArgs[0]]
+    functionName: "getRedeemAmountOut",
+    args: [parseUnits(mintAmount.toString(), MINI_SLAYER_DECIMALS), tokenPrice || BigInt(0), getPricesArgs[0],getPricesArgs[1]]
   })
 
-  async function handleApprove() {
+  
+ 
+  async function handleRedeem() {
 
-    const toastId = toast.loading("Approving");
-
-    try {
-      const txHash = await writeContractAsync({
-        address: USDV,
-        abi: erc20Abi,
-        functionName: "approve",
-        args: [MINI_SLAYER, requireAllowance]
-      })
-
-      toast.loading("Tx Sent , Waiting for Tx to Complete", {
-        id: toastId
-      })
-
-      try {
-        await waitForTransactionReceipt(wagmiConfig, {
-          hash: txHash
-        })
-        await refetchAllowance();
-        toast.success("Approval Completed", { id: toastId });
-      } catch (err) {
-        toast.error("Tx Sent , but failed to wait for confirmation , please refresh", { id: toastId })
-      }
-
-
-    }
-    catch (err) {
-      toast.error("Unable to Approve", { id: toastId })
-    }
-
-
-
-
-
-
-  }
-
-  async function handleMint() {
-
-    const toastId = toast.loading("Minting");
+    const toastId = toast.loading("Redeeming");
 
     try {
       const txHash = await writeContractAsync({
         ...miniSlayerContract,
-        functionName: "mintToken",
-        args: [getAmountOutSuccess ? getAmountOut.chargeAmount : BigInt(0), getAmountOutSuccess ? getAmountOut.mintCount : BigInt(0)]
+        functionName: "redeemToken",
+        args: [parseUnits(mintAmount.toString(),MINI_SLAYER_DECIMALS), getAmountOutSuccess ? getAmountOut.redeemAmount : BigInt(0)]
       })
 
       toast.loading("Tx Sent , Waiting for Tx to Complete", {
@@ -169,7 +132,7 @@ const Redeem = () => {
           hash: txHash
         })
         await refetchAllowance();
-        toast.success("Approval Completed", { id: toastId });
+        toast.success("Redeem Completed", { id: toastId });
       } catch (err) {
         toast.error("Tx Sent , but failed to wait for confirmation , please refresh", { id: toastId })
       }
@@ -188,7 +151,7 @@ const Redeem = () => {
   }
 
 
-  const requireAllowance = getAmountOutSuccess ? getAmountOut.chargeAmount : BigInt(0);
+  const requireAllowance = getAmountOutSuccess ? getAmountOut.redeemAmount : BigInt(0);
   const requireApproval = (usdvAllowance || BigInt(0)) < requireAllowance;
 
   return (
@@ -197,7 +160,9 @@ const Redeem = () => {
         <h1 className="font-bold text-lg sm:text-2xl">Redeem</h1>
 
         <div className="border-2 rounded-full p-0.5 text-2xl">
-          <CgArrowsExchangeV />
+          <CgArrowsExchangeV onClick={()=>{
+
+          }}/>
         </div>
       </div>
 
@@ -222,6 +187,12 @@ const Redeem = () => {
               <input
                 type="number"
                 ref={amountInRef}
+                onChange={(e)=>{
+                  const num = Number(e.target.value);
+                  if(!isNaN(num)){
+                    setMintAmount(num)
+                  }
+                }}
                 placeholder="0"
                 className="w-full bg-transparent outline-none font-bold text-lg sm:text-2xl"
               />
@@ -260,7 +231,7 @@ const Redeem = () => {
 
             <div className="bg-[#121212] rounded-lg rounded-l-none p-4 flex-1 flex items-center gap-2 sm:p-6 sm:gap-4">
               <div className="w-full bg-transparent outline-none font-bold text-lg sm:text-2xl">
-                0
+                {getAmountOutLoading ? "..." :(getAmountOutSuccess ? formatUnits(getAmountOut.redeemAmount,MINI_SLAYER_DECIMALS) : "")}
               </div>
             </div>
           </div>
@@ -284,17 +255,20 @@ const Redeem = () => {
         </div>
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2 sm:gap-4">
-            <h1 className="font-semibold">Total USDV spent</h1>
+            <h1 className="font-semibold">Total USDV Receivable</h1>
 
             <LabelBadge text="-5% Tax" className="text-red" />
           </div>
 
-          <p className="font-medium">0</p>
+          <p className="font-medium">{getAmountOutSuccess ? formatUnits(getAmountOut.redeemAmount,USDV_DECIMALS): ""}</p>
         </div>
       </div>
 
       <div className="w-full flex flex-col gap-4">
-        <PrimaryButton label="REDEEM" className="py-3 rounded-[8px]" />
+        {isConnected ? <PrimaryButton label="REDEEM" className="py-3 rounded-[8px]" onClick={handleRedeem} /> :
+        
+        <PrimaryButton label="Connect Wallet" className="py-3 rounded-[8px]" onClick={openConnectModal} />}
+        
 
         <hr className="border-gray-400" />
 
