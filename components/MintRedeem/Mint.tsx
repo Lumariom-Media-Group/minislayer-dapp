@@ -311,9 +311,9 @@ const Mint = () => {
       </div>
 
       <div className="w-full flex flex-col gap-4">
-        {isConnected ? <PrimaryButton label={requireApproval ? "Approve" : "Mint"} className="py-3 rounded-[8px]" onClick={requireApproval ? handleApprove : handleMint} />:
+        {isConnected ? <PrimaryButton label={requireApproval ? "Approve" : "Mint"} className="py-3 rounded-[8px]" onClick={requireApproval ? handleApprove : handleMint} /> :
 
-<PrimaryButton label="Connect Wallet" className="py-3 rounded-[8px]" onClick={openConnectModal} />}
+          <PrimaryButton label="Connect Wallet" className="py-3 rounded-[8px]" onClick={openConnectModal} />}
 
         <hr className="border-gray-400" />
 
