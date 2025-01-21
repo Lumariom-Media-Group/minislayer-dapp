@@ -12,6 +12,7 @@ import { wagmiConfig } from "@/lib/wagmiConfig";
 import { useWriteContract } from "wagmi";
 import { toast } from "react-hot-toast";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { useWatchBlocks } from "wagmi";
 const miniSlayerContract = {
   address: MINI_SLAYER,
   abi: miniSlayerAbi
@@ -32,10 +33,11 @@ const Mint = () => {
     address: USDV,
     abi: erc20Abi,
     functionName: "balanceOf",
+    
     args: [address ? address : zeroAddress]
   })
 
-  const { data: amountMintedOrRedeemed } = useReadContract({
+  const { data: amountMintedOrRedeemed,refetch:refetchMintedOrRedeemed } = useReadContract({
     address: MINI_SLAYER,
     abi: miniSlayerAbi,
     functionName: "amountMintedOrRedeemed"
@@ -48,7 +50,7 @@ const Mint = () => {
     args: [address || zeroAddress, MINI_SLAYER]
   })
 
-  const { data: currentLevel } = useReadContract({
+  const { data: currentLevel,refetch:refetchCurrentLevel } = useReadContract({
     address: MINI_SLAYER,
     abi: miniSlayerAbi,
     functionName: "getLevel",
@@ -58,14 +60,15 @@ const Mint = () => {
   console.log("amountMintedOrRedeemed", amountMintedOrRedeemed)
 
 
-  const { data: miniSlayerLP } = useReadContract({
+  const { data: miniSlayerLP,refetch:refetchMiniSlayerLP } = useReadContract({
     address: USDV,
     abi: erc20Abi,
     functionName: "balanceOf",
+    
     args: [MINI_SLAYER]
   })
 
-  const { data: getPricesArgs_ } = useReadContracts({
+  const { data: getPricesArgs_,refetch:refetchGetPricesArgs } = useReadContracts({
     contracts: [
       {
         ...miniSlayerContract,
@@ -76,20 +79,20 @@ const Mint = () => {
         functionName: "lockedMinimumAmount"
       }
     ],
-    
+  
     allowFailure: false,
   })
 
   const getPricesArgs = getPricesArgs_ ? getPricesArgs_ : [BigInt(0), BigInt(0)] as [bigint, bigint]
 
-  const { data: miniSlayerPrice, error } = useReadContract({
+  const { data: miniSlayerPrice, error,refetch:refetchMiniSlayerPrice } = useReadContract({
     address: MINI_SLAYER,
     abi: miniSlayerAbi,
     functionName: "getPrices",
     args: getPricesArgs
   })
 
-  const { data: tokenPrice } = useReadContract({
+  const { data: tokenPrice,refetch:refetchTokenPrice } = useReadContract({
     address: MINI_SLAYER,
     abi: miniSlayerAbi,
     functionName: "tokenPrice",
@@ -193,7 +196,12 @@ const Mint = () => {
   const requireAllowance = getAmountOutSuccess ? getAmountOut.chargeAmount : BigInt(0);
   const requireApproval = (usdvAllowance || BigInt(0)) < requireAllowance;
 
-
+  useWatchBlocks({
+    async onBlock() {
+      await refetchCurrentLevel();
+      await refetchTokenPrice();
+    },
+  })
 
 
 
