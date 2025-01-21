@@ -16,7 +16,7 @@ import {
 
 export const wagmiConfig = getDefaultConfig({
     appName: 'My RainbowKit App',
-    projectId: 'YOUR_PROJECT_ID',
+    projectId: '876dfdad5fe2328754adbfc08c7aaf4f',
     chains: [polygon],
     ssr: true, // If your dApp uses server side rendering (SSR)
 });

@@ -76,6 +76,7 @@ const Mint = () => {
         functionName: "lockedMinimumAmount"
       }
     ],
+    
     allowFailure: false,
   })
 
@@ -101,10 +102,10 @@ const Mint = () => {
   const { data: getAmountOut, isSuccess: getAmountOutSuccess, isLoading: getAmountOutLoading } = useReadContract({
     ...miniSlayerContract,
     functionName: "getAmountOut",
+    
     args: [parseUnits(mintAmount.toString(), USDV_DECIMALS), tokenPrice || BigInt(0), getPricesArgs[0]]
   })
-  console.log("allowance", usdvAllowance)
-  console.log("getAmountOut", getAmountOut)
+  
 
   async function handleApprove() {
 
