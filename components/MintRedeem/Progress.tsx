@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const MintProgress = () => {
+const Progress = () => {
   const [data, setData] = useState({
     total_mint_volume: 0,
     total_redeem_volume: 0,
@@ -23,7 +23,7 @@ const MintProgress = () => {
 
         // Calculate percentage based on mint volume
         const calculatedPercentage = (
-          (result.total_mint_volume / result.total_volume) *
+          (result.total_volume_24h / result.total_volume) *
           100
         ).toFixed(2);
 
@@ -55,15 +55,15 @@ const MintProgress = () => {
       {/* Volume Details */}
       <div className="w-full flex flex-col gap-3 text-sm sm:text-base">
         <div className="flex items-center justify-between gap-4">
-          <h1 className="font-semibold">Daily Mint Volume:</h1>
+          <h1 className="font-semibold">Daily Volume:</h1>
           <p className="font-semibold text-[#DADCF2]">
-            ${Number(data.total_mint_volume_24h).toLocaleString()} USDV
+            ${Number(data.total_volume_24h).toLocaleString()} USDV
           </p>
         </div>
         <div className="flex items-center justify-between gap-4">
-          <h1 className="font-semibold">All Time Mint Volume:</h1>
+          <h1 className="font-semibold">All Time Volume:</h1>
           <p className="font-semibold text-[#DADCF2]">
-            ${Number(data.total_mint_volume).toLocaleString()} USDV
+            ${Number(data.total_volume).toLocaleString()} USDV
           </p>
         </div>
       </div>
@@ -71,4 +71,4 @@ const MintProgress = () => {
   );
 };
 
-export default MintProgress;
+export default Progress;

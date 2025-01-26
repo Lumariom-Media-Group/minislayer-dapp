@@ -4,8 +4,7 @@ import MintRedeemContainer from "@/components/MintRedeem/MintRedeemContainer";
 import CalculatorContainer from "@/components/Calculator/CalculatorContainer";
 import { useAtom } from "jotai";
 import { activeTabAtom, showCalculatorAtom } from "@/atoms/atoms";
-import MintProgress from "@/components/MintRedeem/MintProgress";
-import RedeemProgress from "@/components/MintRedeem/RedeemProgress";
+import Progress from "@/components/MintRedeem/Progress";
 
 export default function MintRedeem() {
   const [activeTab, setActiveTab] = useAtom(activeTabAtom);
@@ -39,8 +38,7 @@ export default function MintRedeem() {
         </div>
 
         {/* Active Tab Progress Bar */}
-        {!showCalculator &&
-          (activeTab === "Mint" ? <MintProgress /> : <RedeemProgress />)}
+        {!showCalculator && <Progress />}
 
         {/* Active Tab Content */}
         {!showCalculator ? <MintRedeemContainer /> : <CalculatorContainer />}
