@@ -1,0 +1,74 @@
+import React, { useEffect, useState } from "react";
+
+const MintProgress = () => {
+  const [data, setData] = useState({
+    total_mint_volume: 0,
+    total_redeem_volume: 0,
+    total_volume: 0,
+    total_mint_volume_24h: 0,
+    total_redeem_volume_24h: 0,
+    total_volume_24h: 0,
+  });
+
+  const [percentage, setPercentage] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/api/getTotalVolume"
+        );
+        const result = await response.json();
+        setData(result);
+
+        // Calculate percentage based on mint volume
+        const calculatedPercentage = (
+          (result.total_mint_volume / result.total_volume) *
+          100
+        ).toFixed(2);
+
+        setPercentage(parseFloat(calculatedPercentage));
+      } catch (error) {
+        console.error("Error fetching volume data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <div className="bg-darkSlate relative z-10 p-4 rounded-xl shadow-insetDarkGlow flex flex-col gap-6 sm:p-6">
+      {/* Progress Bar */}
+      <div className="progress relative">
+        <div
+          className="bar"
+          style={{ "--progress": `${percentage}%` } as React.CSSProperties}
+        >
+          <div className="progress-value">
+            <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-semibold text-lg text-gray">
+              {percentage}%
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Volume Details */}
+      <div className="w-full flex flex-col gap-3 text-sm sm:text-base">
+        <div className="flex items-center justify-between gap-4">
+          <h1 className="font-semibold">Daily Mint Volume:</h1>
+          <p className="font-semibold text-[#DADCF2]">
+            ${Number(data.total_mint_volume_24h).toLocaleString()} USDV
+          </p>
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <h1 className="font-semibold">All Time Mint Volume:</h1>
+          <p className="font-semibold text-[#DADCF2]">
+            ${Number(data.total_mint_volume).toLocaleString()} USDV
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MintProgress;
