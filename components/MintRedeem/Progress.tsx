@@ -51,7 +51,9 @@ const Progress = () => {
             </span>
           </div>
         </div>
+        
       </div>
+      <p className="italic text-sm">*Fee Free at 100%*</p>
 
       {/* Volume Details */}
       <div className="w-full flex flex-col gap-3 text-sm sm:text-base">
@@ -68,6 +70,7 @@ const Progress = () => {
           </p>
         </div>
       </div>
+     
     </div>
   );
 };
