@@ -16,7 +16,7 @@ const Progress = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/getTotalVolume"
+          "/api/getTotalVolume"
         );
         const result = await response.json();
         setData(result);
