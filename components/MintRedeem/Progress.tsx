@@ -21,13 +21,14 @@ const Progress = () => {
         const result = await response.json();
         setData(result);
 
-        // Calculate percentage based on mint volume
-        const calculatedPercentage = (
-          (result.total_volume_24h / result.total_volume) *
-          100
-        ).toFixed(2);
+        const currentAmount = parseFloat(result.total_volume);
+        //20 million is the target amount
+        const targetAmount= 20000000;
 
-        setPercentage(parseFloat(calculatedPercentage));
+        // Calculate percentage based on mint volume
+        const calculatedPercentage = (currentAmount / targetAmount) * 100;
+
+        setPercentage(parseFloat(calculatedPercentage.toFixed(2)));
       } catch (error) {
         console.error("Error fetching volume data:", error);
       }
