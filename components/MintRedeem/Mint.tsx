@@ -2,17 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import PrimaryButton from "../buttons/PrimaryButton";
 import LabelBadge from "../ui-elements/LabelBadge";
 import { CgArrowsExchangeV } from "react-icons/cg";
-import { erc20Abi, formatUnits, parseUnits, zeroAddress } from "viem";
+import { ContractFunctionExecutionError, erc20Abi, formatUnits, parseUnits, zeroAddress } from "viem";
 import { miniSlayerAbi } from "@/abi/miniSlayerAbi";
 import { useReadContract, useReadContracts } from "wagmi";
 import { MINI_SLAYER, MINI_SLAYER_DECIMALS, USDV, USDV_DECIMALS } from "@/constants";
 import { useAccount } from "wagmi";
-import { waitForTransactionReceipt } from "wagmi/actions";
+import { simulateContract, waitForTransactionReceipt } from "wagmi/actions";
 import { wagmiConfig } from "@/lib/wagmiConfig";
 import { useWriteContract } from "wagmi";
 import { toast } from "react-hot-toast";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useWatchBlocks } from "wagmi";
+
+import { BaseError, ContractFunctionRevertedError } from 'viem';
+
 const miniSlayerContract = {
   address: MINI_SLAYER,
   abi: miniSlayerAbi
@@ -29,7 +32,7 @@ const Mint = () => {
   const [amountOut, setAmountOut] = useState("");
   const { address, isConnected } = useAccount();
 
-  const { data: usdvBalance } = useReadContract({
+  const { data: usdvBalance,refetch:refetchUsdvBalance } = useReadContract({
     address: USDV,
     abi: erc20Abi,
     functionName: "balanceOf",
@@ -156,11 +159,31 @@ const Mint = () => {
     try {
       console.log("mintingWithArgs", [parseUnits(mintAmount.toString(), USDV_DECIMALS), getAmountOutSuccess ? getAmountOut.mintCount : BigInt(0)])
 
+      
+      try {
+        const result = await simulateContract(wagmiConfig,{
+          ...miniSlayerContract,
+          functionName: "mintToken",
+          args: [parseUnits(mintAmount.toString(), USDV_DECIMALS), getAmountOutSuccess ? getAmountOut.mintCount : BigInt(0)],
+          
+        })
 
+
+        
+      } catch (err) {
+        console.log("simulationError", err)
+        if(err instanceof ContractFunctionExecutionError){
+          toast.error("Tx Likely to Fail : "+err.shortMessage, { id: toastId })
+          return
+        }
+       
+        
+      }
 
       const txHash = await writeContractAsync({
         ...miniSlayerContract,
         functionName: "mintToken",
+        
         args: [parseUnits(mintAmount.toString(), USDV_DECIMALS), getAmountOutSuccess ? getAmountOut.mintCount : BigInt(0)]
       })
 
@@ -174,6 +197,7 @@ const Mint = () => {
           hash: txHash
         })
         await refetchAllowance();
+        await refetchUsdvBalance();
         toast.success("Mint Completed", { id: toastId });
       } catch (err) {
         toast.error("Tx Sent , but failed to wait for confirmation , please refresh", { id: toastId })
@@ -254,11 +278,20 @@ const Mint = () => {
 
                 onClick={() => {
                   const balance = Number(formatUnits(usdvBalance || BigInt(0), USDV_DECIMALS))
-                  setMintAmount(balance)
-                  if (amountInRef.current) {
-                    amountInRef.current.value = balance.toString()
-
+                  if(balance>0){
+                    //set balance - 20% as mint amount
+                    setMintAmount(balance*0.8)
+                    if (amountInRef.current) {
+                      amountInRef.current.value = (balance*0.8).toString()
+                    }
                   }
+                  else{
+                    setMintAmount(0)
+                    if (amountInRef.current) {
+                      amountInRef.current.value = "0"
+                    }
+                  }
+                 
 
                 }}
 
@@ -328,7 +361,7 @@ const Mint = () => {
 
         <p className="text-center font-semibold leading-none">
           MintRedeem or Redeem USDV{" "}
-          <a href="#" className="text-green hover:underline">
+          <a href="https://usdv.lumariommediagroup.com/" className="text-green hover:underline" target="_blank" rel="noreferrer">
             here
           </a>
         </p>
