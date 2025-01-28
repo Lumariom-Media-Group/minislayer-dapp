@@ -284,7 +284,7 @@ const Mint = () => {
                   );
                   if (balance > 0) {
                     //set balance - 20% 
-                    let amount = balance - (balance * 0.2);
+                    const amount = balance - (balance * 0.2);
                     setMintAmount(amount);
                     if (amountInRef.current) {
                       amountInRef.current.value = amount.toString();
