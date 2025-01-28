@@ -15,19 +15,18 @@ const Progress = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/api/getTotalVolume"
-        );
+        const response = await fetch("/api/getTotalVolume");
         const result = await response.json();
         setData(result);
 
-        // Calculate percentage based on mint volume
-        const calculatedPercentage = (
-          (result.total_volume_24h / result.total_volume) *
-          100
-        ).toFixed(2);
+        const currentAmount = parseFloat(result.total_volume);
+        //20 million is the target amount
+        const targetAmount = 20000000;
 
-        setPercentage(parseFloat(calculatedPercentage));
+        // Calculate percentage based on mint volume
+        const calculatedPercentage = (currentAmount / targetAmount) * 100;
+
+        setPercentage(parseFloat(calculatedPercentage.toFixed(2)));
       } catch (error) {
         console.error("Error fetching volume data:", error);
       }
@@ -42,7 +41,9 @@ const Progress = () => {
       <div className="progress relative">
         <div
           className="bar"
-          style={{ "--progress": `${percentage}%` } as React.CSSProperties}
+          style={{
+            width: `${percentage}%`,
+          }}
         >
           <div className="progress-value">
             <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-semibold text-lg text-gray">
@@ -51,6 +52,7 @@ const Progress = () => {
           </div>
         </div>
       </div>
+      <p className="italic text-sm">*Fee Free at 100%*</p>
 
       {/* Volume Details */}
       <div className="w-full flex flex-col gap-3 text-sm sm:text-base">
