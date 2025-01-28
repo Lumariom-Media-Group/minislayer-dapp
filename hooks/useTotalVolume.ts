@@ -22,7 +22,7 @@ const getTotalVolume = async (): Promise<VolumeData> => {
 
 export const useTotalVolume = () => {
     return useQuery({
-        refetchInterval: 1000,
+        refetchInterval: 3000,
         queryKey: ['getTotalVolume'],
         queryFn: () => getTotalVolume(),
     })

@@ -24,7 +24,7 @@ export async function GET() {
 
   const midNightBlock = await getBlockNumberByTimestamp(getLastMidnightUTC())
 
-  console.log("midNightBlock",midNightBlock)
+ 
 
   const sql = postgres(process.env.DATABASE_URL as string);
 
@@ -32,25 +32,22 @@ export async function GET() {
     // Execute the query
     const result = await sql`
       SELECT 'total_usdv' AS metric, COALESCE(SUM(CAST(usdv_entered AS DECIMAL)), 0) AS total_amount
-      FROM minislayertracker_mini_slayertest.mint_event
+      FROM minislayertracker_mini_slayer_live.mint_event
       UNION ALL
       SELECT 'total_redeem' AS metric, COALESCE(SUM(CAST(redeem_amount AS DECIMAL)), 0) AS total_amount
-      FROM minislayertracker_mini_slayertest.redeem_event;
+      FROM minislayertracker_mini_slayer_live.redeem_event;
     `;
 
     const result24Hour = await sql`
       SELECT 'total_usdv' AS metric,          COALESCE(SUM(CAST(usdv_entered AS DECIMAL)), 0) AS total_amount
 
-      FROM minislayertracker_mini_slayertest.mint_event
+      FROM minislayertracker_mini_slayer_live.mint_event
       WHERE block_number > ${midNightBlock}
       UNION ALL
       SELECT 'total_redeem' AS metric, COALESCE(SUM(CAST(redeem_amount AS DECIMAL)), 0) AS total_amount
-      FROM minislayertracker_mini_slayertest.redeem_event
+      FROM minislayertracker_mini_slayer_live.redeem_event
       WHERE block_number > ${midNightBlock};
     `;
-
-    console.log("result24Hour",result24Hour)
-
 
     // Return the result as JSON
     return NextResponse.json({
@@ -62,7 +59,7 @@ export async function GET() {
       "total_volume_24h": parseFloat(formatUnits(result24Hour[0].total_amount, 6)) + parseFloat(formatUnits(result24Hour[1].total_amount, 6)),
     });
   } catch (error) {
-    console.log("eror",error)
+   
     // Handle errors (e.g., connection issues or query errors)
     
     return NextResponse.json(
