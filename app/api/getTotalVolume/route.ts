@@ -31,21 +31,21 @@ export async function GET() {
   try {
     // Execute the query
     const result = await sql`
-      SELECT 'total_usdv' AS metric, SUM(CAST(usdv_entered AS DECIMAL)) AS total_amount
-      FROM minislayertracker_mini_slayer.mint_event
+      SELECT 'total_usdv' AS metric, COALESCE(SUM(CAST(usdv_entered AS DECIMAL)), 0) AS total_amount
+      FROM minislayertracker_mini_slayer_live.mint_event
       UNION ALL
-      SELECT 'total_redeem' AS metric, SUM(CAST(redeem_amount AS DECIMAL)) AS total_amount
-      FROM minislayertracker_mini_slayer.redeem_event;
+      SELECT 'total_redeem' AS metric, COALESCE(SUM(CAST(redeem_amount AS DECIMAL)), 0) AS total_amount
+      FROM minislayertracker_mini_slayer_live.redeem_event;
     `;
 
     const result24Hour = await sql`
       SELECT 'total_usdv' AS metric,          COALESCE(SUM(CAST(usdv_entered AS DECIMAL)), 0) AS total_amount
 
-      FROM minislayertracker_mini_slayer.mint_event
+      FROM minislayertracker_mini_slayer_live.mint_event
       WHERE block_number > ${midNightBlock}
       UNION ALL
       SELECT 'total_redeem' AS metric, COALESCE(SUM(CAST(redeem_amount AS DECIMAL)), 0) AS total_amount
-      FROM minislayertracker_mini_slayer.redeem_event
+      FROM minislayertracker_mini_slayer_live.redeem_event
       WHERE block_number > ${midNightBlock};
     `;
 
