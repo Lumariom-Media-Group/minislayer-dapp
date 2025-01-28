@@ -173,10 +173,22 @@ const Mint = () => {
     const toastId = toast.loading("Minting");
 
     try {
-      console.log("mintingWithArgs", [
-        parseUnits(mintAmount.toString(), USDV_DECIMALS),
-        getAmountOutSuccess ? getAmountOut.mintCount : BigInt(0),
-      ]);
+      try {
+        const result = await simulateContract(wagmiConfig, {
+          ...miniSlayerContract,
+          functionName: "mintToken",
+          args: [
+            parseUnits(mintAmount.toString(), USDV_DECIMALS),
+            getAmountOutSuccess ? getAmountOut.mintCount : BigInt(0),
+          ],
+        });
+      } catch (err) {
+        console.log("simulationError", err);
+        if (err instanceof ContractFunctionExecutionError) {
+          toast.error("Tx Likely to Fail : " + err.shortMessage, { id: toastId });
+          return;
+        }
+      }
 
       const txHash = await writeContractAsync({
         ...miniSlayerContract,
@@ -197,6 +209,7 @@ const Mint = () => {
         });
         await refetchAllowance();
         await refetchUsdvBalance();
+        await refetchCurrentLevel();
         toast.success("Mint Completed", { id: toastId });
       } catch (err) {
         toast.error(
@@ -269,7 +282,7 @@ const Mint = () => {
                   const balance = Number(
                     formatUnits(usdvBalance || BigInt(0), USDV_DECIMALS)
                   );
-                  if(balance > 0){
+                  if (balance > 0) {
                     //set balance - 20% 
                     let amount = balance - (balance * 0.2);
                     setMintAmount(amount);
@@ -277,13 +290,13 @@ const Mint = () => {
                       amountInRef.current.value = amount.toString();
                     }
                   }
-                  else{
+                  else {
                     setMintAmount(0);
                     if (amountInRef.current) {
                       amountInRef.current.value = "0";
                     }
                   }
-                  
+
                 }}
                 className="border border-text rounded-lg px-4 py-1 font-semibold"
               >
@@ -312,8 +325,8 @@ const Mint = () => {
                 {getAmountOutLoading
                   ? "..."
                   : getAmountOutSuccess
-                  ? formatUnits(getAmountOut.mintCount, MINI_SLAYER_DECIMALS)
-                  : ""}
+                    ? formatUnits(getAmountOut.mintCount, MINI_SLAYER_DECIMALS)
+                    : ""}
               </div>
             </div>
           </div>
@@ -351,8 +364,8 @@ const Mint = () => {
             {getAmountOutLoading
               ? "..."
               : getAmountOutSuccess
-              ? formatUnits(getAmountOut.chargeAmount, USDV_DECIMALS)
-              : ""}
+                ? formatUnits(getAmountOut.chargeAmount, USDV_DECIMALS)
+                : ""}
           </p>
         </div>
       </div>
