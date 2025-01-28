@@ -52,7 +52,7 @@ const Progress = () => {
           </div>
         </div>
       </div>
-      <p className="italic text-sm">*Fee Free at 100%*</p>
+      <p className="italic text-sm">*Mint Fee Free at 100%*</p>
 
       {/* Volume Details */}
       <div className="w-full flex flex-col gap-3 text-sm sm:text-base">
