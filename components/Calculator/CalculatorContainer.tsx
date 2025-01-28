@@ -5,6 +5,7 @@ import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa6";
 import { useReadContract } from "wagmi";
 
+
 export default function Calculator() {
   
   const [currentLevel, setCurrentLevel] = useState(3);
@@ -197,7 +198,7 @@ export default function Calculator() {
           <div className="bg-background flex flex-col gap-1 font-medium px-4 py-3 md:px-5 md:py-4 rounded-lg shadow-insetDarkGlow">
             <div className="flex items-center gap-1 font-bold text-base sm:text-lg">
               <span>{totalAmount}</span>
-              <span className="text-red">
+              <span className={selectedCalculator == "Mint Calculator" ? "text-green":"text-red"}>
                 {selectedCalculator == "Mint Calculator"
                   ? "+20% Tax"
                   : "-5% Tax"}
