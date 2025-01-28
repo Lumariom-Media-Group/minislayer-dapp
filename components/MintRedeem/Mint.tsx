@@ -2,7 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import PrimaryButton from "../buttons/PrimaryButton";
 import LabelBadge from "../ui-elements/LabelBadge";
 import { CgArrowsExchangeV } from "react-icons/cg";
-import { erc20Abi, formatUnits, parseUnits, zeroAddress } from "viem";
+import {
+  ContractFunctionExecutionError,
+  erc20Abi,
+  formatUnits,
+  parseUnits,
+  zeroAddress,
+} from "viem";
 import { miniSlayerAbi } from "@/abi/miniSlayerAbi";
 import { useReadContract, useReadContracts } from "wagmi";
 import {
@@ -12,12 +18,15 @@ import {
   USDV_DECIMALS,
 } from "@/constants";
 import { useAccount } from "wagmi";
-import { waitForTransactionReceipt } from "wagmi/actions";
+import { simulateContract, waitForTransactionReceipt } from "wagmi/actions";
 import { wagmiConfig } from "@/lib/wagmiConfig";
 import { useWriteContract } from "wagmi";
 import { toast } from "react-hot-toast";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useWatchBlocks } from "wagmi";
+
+import { BaseError, ContractFunctionRevertedError } from "viem";
+
 const miniSlayerContract = {
   address: MINI_SLAYER,
   abi: miniSlayerAbi,
@@ -33,7 +42,7 @@ const Mint = () => {
   const [amountOut, setAmountOut] = useState("");
   const { address, isConnected } = useAccount();
 
-  const { data: usdvBalance } = useReadContract({
+  const { data: usdvBalance, refetch: refetchUsdvBalance } = useReadContract({
     address: USDV,
     abi: erc20Abi,
     functionName: "balanceOf",
@@ -187,6 +196,7 @@ const Mint = () => {
           hash: txHash,
         });
         await refetchAllowance();
+        await refetchUsdvBalance();
         toast.success("Mint Completed", { id: toastId });
       } catch (err) {
         toast.error(
@@ -355,7 +365,12 @@ const Mint = () => {
 
         <p className="text-center font-semibold leading-none">
           MintRedeem or Redeem USDV{" "}
-          <a href="#" className="text-green hover:underline">
+          <a
+            href="https://usdv.lumariommediagroup.com/"
+            className="text-green hover:underline"
+            target="_blank"
+            rel="noreferrer"
+          >
             here
           </a>
         </p>

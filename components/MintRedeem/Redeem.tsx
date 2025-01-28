@@ -4,7 +4,13 @@ import LabelBadge from "../ui-elements/LabelBadge";
 import { CgArrowsExchangeV } from "react-icons/cg";
 import { useEffect, useRef, useState } from "react";
 
-import { erc20Abi, formatUnits, parseUnits, zeroAddress } from "viem";
+import {
+  ContractFunctionExecutionError,
+  erc20Abi,
+  formatUnits,
+  parseUnits,
+  zeroAddress,
+} from "viem";
 import { miniSlayerAbi } from "@/abi/miniSlayerAbi";
 import { useReadContract, useReadContracts, useWatchBlocks } from "wagmi";
 import {
@@ -14,7 +20,7 @@ import {
   USDV_DECIMALS,
 } from "@/constants";
 import { useAccount } from "wagmi";
-import { waitForTransactionReceipt } from "wagmi/actions";
+import { simulateContract, waitForTransactionReceipt } from "wagmi/actions";
 import { wagmiConfig } from "@/lib/wagmiConfig";
 import { useWriteContract } from "wagmi";
 import { toast } from "react-hot-toast";
@@ -39,11 +45,12 @@ const Redeem = () => {
     args: [address ? address : zeroAddress],
   });
 
-  const { data: miniSlayerBalance } = useReadContract({
-    ...miniSlayerContract,
-    functionName: "balanceOf",
-    args: [address ? address : zeroAddress],
-  });
+  const { data: miniSlayerBalance, refetch: refetchMiniSlayerBalance } =
+    useReadContract({
+      ...miniSlayerContract,
+      functionName: "balanceOf",
+      args: [address ? address : zeroAddress],
+    });
 
   const { data: amountMintedOrRedeemed } = useReadContract({
     address: MINI_SLAYER,
@@ -127,6 +134,23 @@ const Redeem = () => {
 
   async function handleRedeem() {
     const toastId = toast.loading("Redeeming");
+
+    try {
+      const result = await simulateContract(wagmiConfig, {
+        ...miniSlayerContract,
+        functionName: "redeemToken",
+        args: [
+          parseUnits(mintAmount.toString(), MINI_SLAYER_DECIMALS),
+          getAmountOutSuccess ? getAmountOut.redeemAmount : BigInt(0),
+        ],
+      });
+    } catch (err) {
+      console.log("simulationError", err);
+      if (err instanceof ContractFunctionExecutionError) {
+        toast.error("Tx Likely to Fail : " + err.shortMessage, { id: toastId });
+        return;
+      }
+    }
 
     try {
       const txHash = await writeContractAsync({
@@ -321,7 +345,12 @@ const Redeem = () => {
 
         <p className="text-center font-semibold leading-none">
           Mint or Redeem USDV{" "}
-          <a href="#" className="text-green hover:underline">
+          <a
+            href="https://usdv.lumariommediagroup.com/"
+            className="text-green hover:underline"
+            target="_blank"
+            rel="noreferrer"
+          >
             here
           </a>
         </p>

@@ -34,7 +34,7 @@ const Header = () => {
 
   return (
     <header
-      className={`rounded-xl rounded-t-none px-4 sm:px-8 py-6 lg:py-8 ${
+      className={`rounded-xl font-exo rounded-t-none px-4 sm:px-8 py-6 lg:py-8 ${
         isMenuOpen ? "" : "shadow-insetWhiteGlow"
       }`}
     >
