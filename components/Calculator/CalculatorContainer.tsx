@@ -1,9 +1,12 @@
 "use client";
-import { getMintAndRedeemPrice } from "@/constants";
+import { miniSlayerAbi } from "@/abi/miniSlayerAbi";
+import { getMintAndRedeemPrice, MINI_SLAYER } from "@/constants";
 import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa6";
+import { useReadContract } from "wagmi";
 
 export default function Calculator() {
+  
   const [currentLevel, setCurrentLevel] = useState(3);
   const [mintAmount, setMintAmount] = useState(0);
   const [selectedCalculator, setSelectedCalculator] = useState<
@@ -14,6 +17,19 @@ export default function Calculator() {
     selectedCalculator == "Mint Calculator"
       ? mintAmount * getMintAndRedeemPrice(currentLevel).mintPrice
       : mintAmount * getMintAndRedeemPrice(currentLevel).redeemPrice;
+
+      const { data: amountMintedOrRedeemed, refetch: refetchMintedOrRedeemed } =
+          useReadContract({
+            address: MINI_SLAYER,
+            abi: miniSlayerAbi,
+            functionName: "amountMintedOrRedeemed",
+          });
+      const { data: currentLevelInContract, refetch: refetchCurrentLevel } = useReadContract({
+          address: MINI_SLAYER,
+          abi: miniSlayerAbi,
+          functionName: "getLevel",
+          args: [amountMintedOrRedeemed || BigInt(0)],
+        });
 
   function getAmountWithTax(
     amount: number,
@@ -80,7 +96,7 @@ export default function Calculator() {
           <div className="flex items-center">
             Current MS level:{" "}
             <span className="text-primary ml-2 font-bold text-xl sm:text-2xl underline">
-              {currentLevel}
+              {currentLevelInContract ? Number(currentLevelInContract) : 0}
             </span>
           </div>
         </div>
