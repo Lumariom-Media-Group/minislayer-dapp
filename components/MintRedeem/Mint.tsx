@@ -269,10 +269,21 @@ const Mint = () => {
                   const balance = Number(
                     formatUnits(usdvBalance || BigInt(0), USDV_DECIMALS)
                   );
-                  setMintAmount(balance);
-                  if (amountInRef.current) {
-                    amountInRef.current.value = balance.toString();
+                  if(balance > 0){
+                    //set balance - 20% 
+                    let amount = balance - (balance * 0.2);
+                    setMintAmount(amount);
+                    if (amountInRef.current) {
+                      amountInRef.current.value = amount.toString();
+                    }
                   }
+                  else{
+                    setMintAmount(0);
+                    if (amountInRef.current) {
+                      amountInRef.current.value = "0";
+                    }
+                  }
+                  
                 }}
                 className="border border-text rounded-lg px-4 py-1 font-semibold"
               >
