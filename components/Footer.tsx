@@ -9,13 +9,13 @@ const Footer = () => {
         <p className="font-bold">&copy; SLAYER PLATFORM 2025</p>
 
         <div className="flex items-center gap-6">
-          <a href="#">
+          <a href="https://slayer-platform.gitbook.io/mini-slayer">
             <SiGitbook className="text-xl transition-all duration-300 hover:scale-110" />
           </a>
-          <a href="#">
+          <a href="https://x.com/SlayerPlatform">
             <FaXTwitter className="text-xl transition-all duration-300 hover:scale-110" />
           </a>
-          <a href="#">
+          <a href="https://discord.gg/2ndKVN4RYz">
             <FaDiscord className="text-xl transition-all duration-300 hover:scale-110" />
           </a>
         </div>
