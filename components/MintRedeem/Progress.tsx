@@ -1,43 +1,41 @@
 import React, { useEffect, useState } from "react";
+import { useTotalVolume } from "@/hooks/useTotalVolume";
 
 const Progress = () => {
   const [data, setData] = useState({
-    total_mint_volume: 0,
-    total_redeem_volume: 0,
+    total_mint_volume: "0",
+    total_redeem_volume: "0",
     total_volume: 0,
-    total_mint_volume_24h: 0,
-    total_redeem_volume_24h: 0,
+    total_mint_volume_24h: "0",
+    total_redeem_volume_24h: "0",
     total_volume_24h: 0,
   });
 
   const [percentage, setPercentage] = useState(0);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/getTotalVolume");
-        const result = await response.json();
-        setData(result);
+  const {data: volumeData,isLoading:volumeDataLoading,isRefetching:volumeDataRefetching} = useTotalVolume();
 
-        const currentAmount = parseFloat(result.total_volume);
+  useEffect(() => {
+    
+    if(volumeData){
+        setData(volumeData);
+
+        const currentAmount = volumeData.total_volume;
         //20 million is the target amount
         const targetAmount = 20000000;
 
         // Calculate percentage based on mint volume
         const calculatedPercentage = (currentAmount / targetAmount) * 100;
 
-        setPercentage(parseFloat(calculatedPercentage.toFixed(2)));
-      } catch (error) {
-        console.error("Error fetching volume data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+        setPercentage(parseFloat(calculatedPercentage.toFixed(5)));
+    }
+    
+  }, [volumeData]);
 
   return (
     <div className="bg-darkSlate relative z-10 p-4 rounded-xl shadow-insetDarkGlow flex flex-col gap-6 sm:p-6">
       {/* Progress Bar */}
+      
       <div className="progress relative">
         <div
           className="bar"
