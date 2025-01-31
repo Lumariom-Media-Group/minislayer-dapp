@@ -22,7 +22,11 @@ async function getBlockNumberByTimestamp(timestamp: number) {
 export async function GET() {
   // Initialize the connection to the PostgreSQL database
 
-  const midNightBlock = await getBlockNumberByTimestamp(getLastMidnightUTC())
+  let midNightBlock = await getBlockNumberByTimestamp(getLastMidnightUTC())
+
+  if(midNightBlock < 67379292){
+    midNightBlock = 67379292
+  }
 
  
 
@@ -33,9 +37,11 @@ export async function GET() {
     const result = await sql`
       SELECT 'total_usdv' AS metric, COALESCE(SUM(CAST(usdv_entered AS DECIMAL)), 0) AS total_amount
       FROM minislayertracker_mini_slayer_live_final.mint_event
+      WHERE block_number > 67379292
       UNION ALL
       SELECT 'total_redeem' AS metric, COALESCE(SUM(CAST(redeem_amount AS DECIMAL)), 0) AS total_amount
-      FROM minislayertracker_mini_slayer_live_final.redeem_event;
+      FROM minislayertracker_mini_slayer_live_final.redeem_event
+      WHERE block_number > 67379292;
     `;
 
     const result24Hour = await sql`
@@ -48,6 +54,8 @@ export async function GET() {
       FROM minislayertracker_mini_slayer_live_final.redeem_event
       WHERE block_number > ${midNightBlock};
     `;
+
+    
 
     // Return the result as JSON
     return NextResponse.json({
