@@ -1,7 +1,7 @@
 
 export const USDV="0xdAc9856128C93931F4cbdffEcfA1B5cA801AE16F";
 export const USDV_DECIMALS=6;
-export const MINI_SLAYER ="0x7b7e1dB2A8e3Bc30dfFd735e0a3114bDaA0FA8B0";
+export const MINI_SLAYER ="0x09098a73d9cBDb41FaDa4Ef8E8E16A52c4372aA6";
 export const MINI_SLAYER_DECIMALS=6;
 export function getMintAndRedeemPrice(level:number){
     return {mintPrice:level,redeemPrice:level-1};
