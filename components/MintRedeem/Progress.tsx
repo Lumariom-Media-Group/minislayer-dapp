@@ -22,7 +22,7 @@ const Progress = () => {
 
         const currentAmount = volumeData.total_volume;
         //20 million is the target amount
-        const targetAmount = 20000000;
+        const targetAmount = 1000000;
 
         // Calculate percentage based on mint volume
         const calculatedPercentage = (currentAmount / targetAmount) * 100;
