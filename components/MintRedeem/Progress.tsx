@@ -55,9 +55,15 @@ const Progress = () => {
       {/* Volume Details */}
       <div className="w-full flex flex-col gap-3 text-sm sm:text-base">
         <div className="flex items-center justify-between gap-4">
-          <h1 className="font-semibold">Daily Volume:</h1>
-          <p className="font-semibold text-[#DADCF2]">
-            ${Number(data.total_volume_24h).toLocaleString()} USDV
+          <h1 className="font-semibold">Daily Buy Volume:</h1>
+          <p className="font-semibold text-green">
+            ${Number(data.total_mint_volume_24h).toLocaleString()} USDV
+          </p>
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <h1 className="font-semibold">Daily Sell Volume:</h1>
+          <p className="font-semibold text-red">
+            ${Number(data.total_redeem_volume_24h).toLocaleString()} USDV
           </p>
         </div>
         <div className="flex items-center justify-between gap-4">
