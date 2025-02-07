@@ -18,7 +18,9 @@ import {
 export const wagmiConfig = getDefaultConfig({
     appName: 'My RainbowKit App',
     projectId: '876dfdad5fe2328754adbfc08c7aaf4f',
-    transports:{[polygon.id]:fallback([http("https://polygon.llamarpc.com"),http()])},
+    transports:{[polygon.id]:fallback([http("https://polygon.llamarpc.com",{
+        batch:true,
+    }),http()])},
     chains: [polygon],
     ssr: true, // If your dApp uses server side rendering (SSR)
 });
