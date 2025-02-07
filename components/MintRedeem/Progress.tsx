@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useTotalVolume } from "@/hooks/useTotalVolume";
-
 const Progress = () => {
   const [data, setData] = useState({
     total_mint_volume: "0",
