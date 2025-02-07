@@ -357,7 +357,7 @@ const Mint = () => {
           <div className="flex items-center gap-2 sm:gap-4">
             <h1 className="font-semibold">Total USDV spent</h1>
 
-            <LabelBadge text="+20% Tax" />
+            <LabelBadge text="+20% Fee" />
           </div>
 
           <p className="font-medium">

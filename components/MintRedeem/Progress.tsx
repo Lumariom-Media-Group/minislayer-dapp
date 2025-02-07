@@ -62,13 +62,13 @@ const Progress = () => {
         </div>
         <div className="flex items-center justify-between gap-4">
           <h1 className="font-semibold">Daily Sell Volume:</h1>
-          <p className="font-semibold text-red">
+          <p className="font-semibold text-blue">
             ${Number(data.total_redeem_volume_24h).toLocaleString()} USDV
           </p>
         </div>
         <div className="flex items-center justify-between gap-4">
           <h1 className="font-semibold">All Time Volume:</h1>
-          <p className="font-semibold text-[#DADCF2]">
+          <p className="font-semibold text-purple-500">
             ${Number(data.total_volume).toLocaleString()} USDV
           </p>
         </div>
