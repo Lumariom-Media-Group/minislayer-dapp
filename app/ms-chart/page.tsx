@@ -13,10 +13,14 @@ import {
 } from "recharts";
 
 import { format, isToday, subDays } from "date-fns";
+import { useReadContract, useReadContracts } from "wagmi";
+import { MINI_SLAYER, USDV_DECIMALS } from "@/constants";
+import { miniSlayerAbi } from "@/abi/miniSlayerAbi";
+import { formatUnits } from "viem";
 
 export default function MintRedeem() {
-  const [selectedPeriod, setSelectedPeriod] = useState("1D");
-  const { data: chartData } = useChart();
+  const [selectedPeriod, setSelectedPeriod] = useState("All");
+  const { data: chartData,isLoading:chartDataLoading } = useChart();
 
   // Filter chart data based on selectedPeriod
   const filteredData = useMemo(() => {
@@ -64,6 +68,60 @@ export default function MintRedeem() {
     );
   }, [filteredData]);
 
+  const { data: amountMintedOrRedeemed, refetch: refetchMintedOrRedeemed } =
+    useReadContract({
+      address: MINI_SLAYER,
+      abi: miniSlayerAbi,
+      functionName: "amountMintedOrRedeemed",
+    });
+
+
+
+  const { data: currentLevel, refetch: refetchCurrentLevel } = useReadContract({
+    address: MINI_SLAYER,
+    abi: miniSlayerAbi,
+    functionName: "getLevel",
+    args: [amountMintedOrRedeemed || BigInt(0)],
+  });
+
+  const { data: getPricesArgs_, refetch: refetchGetPricesArgs } =
+    useReadContracts({
+      contracts: [
+        {
+          address: MINI_SLAYER,
+          abi: miniSlayerAbi,
+          functionName: "amountMintedOrRedeemed",
+        },
+        {
+          address: MINI_SLAYER,
+          abi: miniSlayerAbi,
+          functionName: "lockedMinimumAmount",
+        },
+      ],
+
+      allowFailure: false,
+    });
+
+  const getPricesArgs = getPricesArgs_
+    ? getPricesArgs_
+    : ([BigInt(0), BigInt(0)] as [bigint, bigint]);
+
+  const {
+    data: miniSlayerPrice,
+    error,
+    refetch: refetchMiniSlayerPrice,
+  } = useReadContract({
+    address: MINI_SLAYER,
+    abi: miniSlayerAbi,
+    functionName: "getPrices",
+    args: getPricesArgs,
+  });
+
+  
+  const [mintPrice, redeemPrice] = miniSlayerPrice
+    ? miniSlayerPrice
+    : [BigInt(0), BigInt(0)];
+
   return (
     <div className="min-h-[calc(100dvh-115.963px-88px)] overflow-hidden px-4 sm:px-8 py-10 sm:py-14 lg:py-20">
       <div className="relative max-w-[700px] rounded-xl mx-auto container flex flex-col gap-8">
@@ -90,12 +148,14 @@ export default function MintRedeem() {
               </div>
 
               <div className="font-bold text-xl sm:text-2xl self-end sm:self-auto">
-                20 USDV ($25)
+                {formatUnits(mintPrice, USDV_DECIMALS)} USDV 
               </div>
             </div>
 
             {/* Chart Here */}
-            <div className="w-full h-[350px] bg-background rounded-2xl shadow-insetDarkGlow">
+            <div className="w-full h-[350px] bg-background rounded-2xl shadow-insetDarkGlow flex items-center justify-center">
+
+              {chartData ? 
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
                   height={350}
@@ -131,21 +191,21 @@ export default function MintRedeem() {
                   />
                 </LineChart>
               </ResponsiveContainer>
+              : <div className="items-center">Loading..</div>}
             </div>
 
             <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-4">
               <div className="font-semibold text-text">
-                MS Live Level: <span className="text-primary">20</span>
+                MS Live Level: <span className="text-primary">{currentLevel?.toString()}</span>
               </div>
               <div className="bg-background p-1 rounded-xl flex items-center gap-1 self-end sm:self-auto">
                 {["1D", "7D", "1M", "1Y", "All"].map((period) => (
                   <button
                     key={period}
-                    className={`rounded-xl px-2 font-medium py-1 border-2 ${
-                      selectedPeriod === period
-                        ? "text-primary border-primary"
-                        : "text-text border-transparent"
-                    }`}
+                    className={`rounded-xl px-2 font-medium py-1 border-2 ${selectedPeriod === period
+                      ? "text-primary border-primary"
+                      : "text-text border-transparent"
+                      }`}
                     onClick={() => setSelectedPeriod(period)}
                   >
                     {period}
