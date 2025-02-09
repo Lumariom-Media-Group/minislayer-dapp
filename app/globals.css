@@ -189,3 +189,18 @@
   initial-value: 0%;
   inherits: true;
 }
+
+/* Hacks */
+.recharts-default-tooltip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.recharts-tooltip-label {
+  color: black !important;
+}
+
+.recharts-tooltip-item {
+  padding: 0 !important;
+}

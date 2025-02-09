@@ -67,6 +67,13 @@ const Header = () => {
           >
             <Link href="/calculator">Calculator</Link>
           </li>
+          <li
+            className={`transition-all duration-300 hover:text-primary ${
+              pathname === "/ms-chart" ? "text-primary" : ""
+            }`}
+          >
+            <Link href="/ms-chart">MS Chart</Link>
+          </li>
         </ul>
 
         {/* Mobile Menu Toggle */}
@@ -111,6 +118,15 @@ const Header = () => {
             >
               <Link href="/calculator" onClick={() => setIsMenuOpen(false)}>
                 Calculator
+              </Link>
+            </li>
+            <li
+              className={`transition-all duration-300 hover:text-primary ${
+                pathname === "/ms-chart" ? "text-primary" : ""
+              }`}
+            >
+              <Link href="/ms-chart" onClick={() => setIsMenuOpen(false)}>
+                MS Chart
               </Link>
             </li>
           </ul>
