@@ -52,7 +52,7 @@ const Header = () => {
         />
 
         {/* Desktop Menu */}
-        <ul className="hidden md:flex items-center text-white font-semibold text-lg gap-8">
+        {/* <ul className="hidden md:flex items-center text-white font-semibold text-lg gap-8">
           <li
             className={`transition-all duration-300 hover:text-primary ${
               pathname === "/" ? "text-primary" : ""
@@ -74,7 +74,7 @@ const Header = () => {
           >
             <Link href="/ms-chart">MS Chart</Link>
           </li>
-        </ul>
+        </ul> */}
 
         {/* Mobile Menu Toggle */}
         <div className="flex items-center gap-4">
@@ -84,7 +84,7 @@ const Header = () => {
             <PrimaryButton label="Connect Wallet" onClick={openConnectModal} />
           )}
 
-          <button
+          {/* <button
             className="md:hidden"
             onClick={toggleMenu}
             aria-label="Toggle menu"
@@ -94,7 +94,7 @@ const Header = () => {
             ) : (
               <CgMenu className="text-2xl transition-all duration-300 hover:text-primary" />
             )}
-          </button>
+          </button> */}
         </div>
       </div>
 
