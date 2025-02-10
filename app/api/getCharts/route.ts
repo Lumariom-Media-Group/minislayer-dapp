@@ -80,6 +80,11 @@ export async function GET() {
 
     
 
+    const hardcodedChartData = {
+      "timestamp":"1738340381",
+      "price":"1",
+    }
+    enrichedResult.unshift(hardcodedChartData);
     
 
     // Return the result as JSON
