@@ -315,7 +315,7 @@ const Redeem = () => {
           <div className="flex items-center gap-2 sm:gap-4">
             <h1 className="font-semibold">Total USDV Receivable</h1>
 
-            <LabelBadge text="-5% Fee" className="text-blue" />
+            <LabelBadge text="-5% Fee" className="!text-blue" />
           </div>
 
           <p className="font-medium">
