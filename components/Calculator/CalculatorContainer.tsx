@@ -185,6 +185,7 @@ export default function Calculator() {
           placeholder="0"
           className="bg-[#121212] outline-none placeholder:text-gray-500 text-xl sm:text-2xl font-medium px-4 py-3 md:px-5 md:py-4 rounded-lg shadow-insetDarkGlow border-2 border-transparent transition-all duration-300 focus:border-primary"
         />
+        <p className="text-sm italic ">*Max amount per level: 10 tokens*</p>
       </div>
 
       <div className="flex flex-col gap-2 sm:gap-2.5">
