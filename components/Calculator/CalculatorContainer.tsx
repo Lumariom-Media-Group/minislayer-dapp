@@ -168,10 +168,17 @@ export default function Calculator() {
           type="number"
           min={1}
           max={10}
+          
           onChange={(e) => {
             const number = Number(e.target.value);
             if (!isNaN(number)) {
-              setMintAmount(number);
+              if(number > 10){
+                e.target.value = "10";
+                setMintAmount(10);
+              }else{
+                setMintAmount(number);
+              }
+              
             }
           }}
           id="mintAmountInput"
