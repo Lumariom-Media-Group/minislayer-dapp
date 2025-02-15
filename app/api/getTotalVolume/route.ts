@@ -55,7 +55,7 @@ export async function GET() {
       WHERE block_number > ${midNightBlock};
     `;
 
-    
+    await sql.end();
 
     // Return the result as JSON
     return NextResponse.json({
@@ -67,6 +67,8 @@ export async function GET() {
       "total_volume_24h": parseFloat(formatUnits(result24Hour[0].total_amount, 6)) + parseFloat(formatUnits(result24Hour[1].total_amount, 6)),
     });
   } catch (error) {
+    await sql.end();
+
    
     // Handle errors (e.g., connection issues or query errors)
     

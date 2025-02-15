@@ -85,11 +85,13 @@ export async function GET() {
       "price":"1",
     }
     enrichedResult.unshift(hardcodedChartData);
-    
+
+    await sql.end();
 
     // Return the result as JSON
     return NextResponse.json(enrichedResult);
   } catch (error) {
+    await sql.end();
     console.log(error)
    
     // Handle errors (e.g., connection issues or query errors)

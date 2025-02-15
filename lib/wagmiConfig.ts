@@ -20,7 +20,7 @@ export const wagmiConfig = getDefaultConfig({
     projectId: '876dfdad5fe2328754adbfc08c7aaf4f',
     transports:{[polygon.id]:fallback([http("https://polygon.llamarpc.com",{
         batch:true,
-    }),http()])},
+    }),http(),http("https://1rpc.io/matic")])},
     chains: [polygon],
-    ssr: true, // If your dApp uses server side rendering (SSR)
+    ssr: true, // If yourx dApp uses server side rendering (SSR)
 });
