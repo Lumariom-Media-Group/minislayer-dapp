@@ -22,7 +22,7 @@ export default function MintRedeem() {
           >
             Mint/Redeem
           </button>
-          <button
+          {/* <button
             className={`px-4 py-2 font-medium text-lg rounded-lg ${
               activeTab === "Calculator"
                 ? "bg-primary text-white"
@@ -31,7 +31,7 @@ export default function MintRedeem() {
             onClick={() => setActiveTab("Calculator")}
           >
             Calculator
-          </button>
+          </button> */}
           <button
             className={`px-4 py-2 font-medium text-lg rounded-lg ${
               activeTab === "MS Chart"
